@@ -1,39 +1,44 @@
-# zealen_hygiene
+<h1>vue-pure-admin精简版（非国际化版本）</h1>
 
-#### 介绍
-{**以下是 Gitee 平台说明，您可以替换此简介**
-Gitee 是 OSCHINA 推出的基于 Git 的代码托管平台（同时支持 SVN）。专为开发者提供稳定、高效、安全的云端软件开发协作平台
-无论是个人、团队、或是企业，都能够用 Gitee 实现代码托管、项目管理、协作开发。企业项目请看 [https://gitee.com/enterprises](https://gitee.com/enterprises)}
+[![license](https://img.shields.io/github/license/pure-admin/vue-pure-admin.svg)](LICENSE)
 
-#### 软件架构
-软件架构说明
+**中文** | [English](./README.en-US.md)
 
+## 介绍
 
-#### 安装教程
+精简版是基于 [vue-pure-admin](https://github.com/pure-admin/vue-pure-admin) 提炼出的架子，包含主体功能，更适合实际项目开发，打包后的大小在全局引入 [element-plus](https://element-plus.org) 的情况下仍然低于 `2.3MB`，并且会永久同步完整版的代码。开启 `brotli` 压缩和 `cdn` 替换本地库模式后，打包大小低于 `350kb`
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+## 版本选择
 
-#### 使用说明
+当前是非国际化版本，如果您需要国际化版本 [请点击](https://github.com/pure-admin/pure-admin-thin/tree/i18n)
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+## 配套视频
 
-#### 参与贡献
+[点我查看 UI 设计](https://www.bilibili.com/video/BV17g411T7rq)  
+[点我查看快速开发教程](https://www.bilibili.com/video/BV1kg411v7QT)  
+[点我查看 vue-pure-admin 的所有页面、功能演示](https://www.bilibili.com/video/BV1Rx4y1U7Mv)
 
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
+## 配套保姆级文档
 
+[点我查看 vue-pure-admin 文档](https://yiming_chang.gitee.io/pure-admin-doc)  
+[点我查看 @pureadmin/utils 文档](https://pure-admin-utils.netlify.app)
 
-#### 特技
+## 优质服务、软件外包、赞助支持
 
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+[点我查看详情](https://yiming_chang.gitee.io/pure-admin-doc/pages/service/)
+
+## 预览
+
+[查看预览](https://pure-admin-thin.netlify.app/#/login)
+
+## 维护者
+
+[xiaoxian521](https://github.com/xiaoxian521)
+
+## ⚠️ 注意
+
+精简版不接受任何 `issues` 和 `pr`，如果有问题请到完整版 [issues](https://github.com/pure-admin/vue-pure-admin/issues/new/choose) 去提，谢谢！
+
+## 许可证
+
+[MIT © 2020-present, pure-admin](./LICENSE)
