@@ -16,10 +16,10 @@ import SettingIcon from "./svg/settings.svg?component";
 import CollapseIcon from "./svg/collapse.svg?component";
 
 const props = {
-  /** 头部最左边的标题 */
+  /** 头部最左边的标题-去掉默认值 */
   title: {
     type: String,
-    default: "列表"
+    default: ""
   },
   /** 对于树形表格，如果想启用展开和折叠功能，传入当前表格的ref即可 */
   tableRef: {
