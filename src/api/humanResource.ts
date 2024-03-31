@@ -78,6 +78,18 @@ export const updateExpertList = (data?: object) => {
 export const deleteExpertList = (data?: object) => {
   return http.request<ResultTable>("delete", "/deleteExpert", { data });
 };
+/** 获取应急药械管理列表 */
+export const getMedicalList = (data?: object) => {
+  return http.request<ResultTable>("post", "/medicalList", { data });
+};
+/** 修改应急药械管理列表 */
+export const updateMedicalList = (data?: object) => {
+  return http.request<ResultTable>("put", "/updateMedical", { data });
+};
+/** 删除应急药械管理列表 */
+export const deleteMedicalList = (data?: object) => {
+  return http.request<ResultTable>("delete", "/deleteMedical", { data });
+};
 
 /** 获取系统管理-用户管理列表 */
 export const getUserList = (data?: object) => {
