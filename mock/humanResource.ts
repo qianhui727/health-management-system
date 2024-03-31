@@ -322,6 +322,159 @@ let healthList: Recordable<any> = [
     healthPhone: "13000130010"
   }
 ];
+let medicalList: Recordable<any> = [
+  {
+    id: "m1",
+    medicalName: "北京协和医院",
+    equipmentCode: "EQ12345",
+    equipmentName: "CT扫描仪",
+    entrance: "否",
+    manufacturer: "西门子医疗",
+    equipmentType: "CT-1000",
+    purchaseTime: 1615766400000,
+    newEquipment: "是",
+    purchasePrice: "800000",
+    designedLife: "10年",
+    sampleNum: "5000",
+    principal: "张主任",
+    preparer: "李医生",
+    submitTime: 1681948800000
+  },
+  {
+    id: "m2",
+    medicalName: "上海瑞金医院",
+    equipmentCode: "EQ67890",
+    equipmentName: "MRI扫描仪",
+    entrance: "是",
+    manufacturer: "通用电气医疗",
+    equipmentType: "MRI-2000",
+    purchaseTime: 1640995200000,
+    newEquipment: "否",
+    purchasePrice: "1200000",
+    designedLife: "8年",
+    sampleNum: "4000",
+    principal: "王主任",
+    preparer: "赵医生",
+    submitTime: 1682035200000
+  },
+  {
+    id: "m3",
+    medicalName: "广州中山医院",
+    equipmentCode: "EQ55555",
+    equipmentName: "超声波仪器",
+    entrance: "否",
+    manufacturer: "飞利浦医疗",
+    equipmentType: "UltraSound-3000",
+    purchaseTime: 1603152000000,
+    newEquipment: "是",
+    purchasePrice: "600000",
+    designedLife: "12年",
+    sampleNum: "3500",
+    principal: "刘主任",
+    preparer: "陈医生",
+    submitTime: 1681862400000
+  },
+  {
+    id: "m4",
+    medicalName: "成都华西医院",
+    equipmentCode: "EQ99999",
+    equipmentName: "心电图机",
+    entrance: "是",
+    manufacturer: "日本光电",
+    equipmentType: "ECG-500",
+    purchaseTime: 1620604800000,
+    newEquipment: "是",
+    purchasePrice: "400000",
+    designedLife: "10年",
+    sampleNum: "2000",
+    principal: "黄主任",
+    preparer: "周医生",
+    submitTime: 1682121600000
+  },
+  {
+    id: "m5",
+    medicalName: "武汉同济医院",
+    equipmentCode: "EQ77777",
+    equipmentName: "全自动生化分析仪",
+    entrance: "否",
+    manufacturer: "贝克曼库尔特",
+    equipmentType: "AutoChem-800",
+    purchaseTime: 1655251200000,
+    newEquipment: "否",
+    purchasePrice: "1000000",
+    designedLife: "9年",
+    sampleNum: "6000",
+    principal: "徐主任",
+    preparer: "吴医生",
+    submitTime: 1682208000000
+  }
+];
+let fatherList: Recordable<any> = [
+  {
+    id: "f1",
+    organizationName: "北京协和医院",
+    location: "住院部5楼A区",
+    bedState: "空闲",
+    bedParam: "标准病床配置",
+    bedType: "普通病床",
+    facilityCondition: "设施齐全，环境良好"
+  },
+  {
+    id: "f2",
+    organizationName: "上海瑞金医院",
+    location: "ICU病房",
+    bedState: "占用",
+    bedParam: "高级监护设备",
+    bedType: "重症监护床",
+    facilityCondition: "设备先进，专业护理"
+  },
+  {
+    id: "f3",
+    organizationName: "广州中山医院",
+    location: "隔离病区",
+    bedState: "预定",
+    bedParam: "负压隔离系统",
+    bedType: "隔离床",
+    facilityCondition: "符合传染病防治标准"
+  },
+  {
+    id: "f4",
+    organizationName: "成都华西医院",
+    location: "急诊室",
+    bedState: "空闲",
+    bedParam: "急救设备齐全",
+    bedType: "急诊床",
+    facilityCondition: "急救设施完备，反应迅速"
+  },
+  {
+    id: "f5",
+    organizationName: "武汉同济医院",
+    location: "康复病房2楼",
+    bedState: "占用",
+    bedParam: "物理治疗设备",
+    bedType: "康复床",
+    facilityCondition: "康复设施完备，环境优美"
+  }
+];
+let sonList: Recordable<any> = {};
+fatherList.forEach(fatherItem => {
+  const { id, organizationName } = fatherItem;
+  sonList[id] = []; // 初始化每个父项的子列表
+
+  // 为每个父项随机生成1到3个子项
+  const numOfSons = Math.floor(Math.random() * 3) + 1;
+  for (let i = 0; i < numOfSons; i++) {
+    sonList[id].push({
+      id: `${id}-son-${i + 1}`, // 子项ID，基于父项ID生成
+      organizationName: `${organizationName}分院${i + 1}`, // 子项机构名称，基于父项名称生成
+      location: `${fatherItem.location}子区${i + 1}`, // 子项位置，基于父项位置生成
+      bedState: fatherItem.bedState === "空闲" ? "空闲" : "预定", // 子项床位状态，基于父项状态随机或根据逻辑生成
+      bedParam: `子项病床配置${i + 1}`, // 子项床位参数
+      bedType: fatherItem.bedType, // 子项床位类型，与父项相同
+      facilityCondition: `子项设施情况${i + 1}` // 子项基本设施情况
+    });
+  }
+});
 export default defineFakeRoute([
   // 获取应急机构管理
   {
@@ -662,9 +815,7 @@ export default defineFakeRoute([
         );
       }
       if (body.expertState)
-        list = organizationList.filter(
-          item => item.expertState === body.expertState
-        );
+        list = expertList.filter(item => item.expertState === body.expertState);
 
       return {
         success: true,
@@ -721,6 +872,272 @@ export default defineFakeRoute([
         data: {
           list: expertList,
           total: expertList.length, // 总条目数
+          pageSize: 10, // 每页显示条目个数
+          currentPage: 1 // 当前页数
+        }
+      };
+    }
+  },
+  // 获取应急药械管理
+  {
+    url: "/medicalList",
+    method: "post",
+    response: ({ body }) => {
+      let list;
+      list = medicalList.filter(item =>
+        item.medicalName.includes(body?.medicalName)
+      );
+      if (body.equipmentCode)
+        list = medicalList.filter(item =>
+          item.equipmentCode.includes(body?.equipmentCode)
+        );
+
+      if (body.equipmentName)
+        list = medicalList.filter(item =>
+          item.equipmentName.includes(body?.equipmentName)
+        );
+      if (body.entrance)
+        list = medicalList.filter(item => item.entrance === body.entrance);
+
+      if (body.manufacturer)
+        list = medicalList.filter(item =>
+          item.manufacturer.includes(body?.manufacturer)
+        );
+      if (body.equipmentType)
+        list = medicalList.filter(item =>
+          item.equipmentType.includes(body?.equipmentType)
+        );
+
+      if (body.purchaseTime)
+        list = medicalList.filter(
+          item => item.purchaseTime === body.purchaseTime
+        );
+      return {
+        success: true,
+        data: {
+          list,
+          total: list.length, // 总条目数
+          pageSize: 10, // 每页显示条目个数
+          currentPage: 1 // 当前页数
+        }
+      };
+    }
+  },
+  // 修改应急药械管理
+  {
+    url: "/updateMedical",
+    method: "put",
+    response: ({ body }) => {
+      for (let i = 0; i < medicalList.length; i++) {
+        if (medicalList[i].id === body.id) {
+          (medicalList[i].medicalName = body.medicalName),
+            (medicalList[i].equipmentCode = body.equipmentCode),
+            (medicalList[i].equipmentName = body.equipmentName),
+            (medicalList[i].entrance = body.entrance),
+            (medicalList[i].manufacturer = body.manufacturer),
+            (medicalList[i].equipmentType = body.equipmentType),
+            (medicalList[i].purchaseTime = body.purchaseTime),
+            (medicalList[i].newEquipment = body.newEquipment),
+            (medicalList[i].purchasePrice = body.purchasePrice),
+            (medicalList[i].designedLife = body.designedLife),
+            (medicalList[i].sampleNum = body.sampleNum),
+            (medicalList[i].principal = body.principal),
+            (medicalList[i].preparer = body.preparer),
+            (medicalList[i].submitTime = body.submitTime);
+          break;
+        }
+        if (i == medicalList.length - 1 && medicalList[i].id !== body.id) {
+          medicalList.push(body);
+        }
+      }
+
+      return {
+        success: true,
+        data: {
+          list: medicalList,
+          total: medicalList.length, // 总条目数
+          pageSize: 10, // 每页显示条目个数
+          currentPage: 1 // 当前页数
+        }
+      };
+    }
+  },
+  // 删除应急药械管理
+  {
+    url: "/deleteMedical",
+    method: "delete",
+    response: ({ body }) => {
+      medicalList = medicalList.filter(item => item.id !== body.id);
+
+      return {
+        success: true,
+        data: {
+          list: medicalList,
+          total: medicalList.length, // 总条目数
+          pageSize: 10, // 每页显示条目个数
+          currentPage: 1 // 当前页数
+        }
+      };
+    }
+  },
+  // 获取父级应急床位管理
+  {
+    url: "/fatherList",
+    method: "post",
+    response: ({ body }) => {
+      let list;
+      list = fatherList.filter(item =>
+        item.organizationName.includes(body?.organizationName)
+      );
+      if (body.bedState) {
+        list = fatherList.filter(item => item.bedState === body.bedState);
+      }
+      if (body.bedType)
+        list = fatherList.filter(item => item.bedType === body.bedType);
+
+      return {
+        success: true,
+        data: {
+          list,
+          total: fatherList.length, // 总条目数
+          pageSize: 10, // 每页显示条目个数
+          currentPage: 1 // 当前页数
+        }
+      };
+    }
+  },
+  // 修改父级应急床位管理
+  {
+    url: "/updateFather",
+    method: "put",
+    response: ({ body }) => {
+      for (let i = 0; i < fatherList.length; i++) {
+        if (fatherList[i].id === body.id) {
+          (fatherList[i].organizationName = body.organizationName),
+            (fatherList[i].location = body.location),
+            (fatherList[i].bedState = body.bedState),
+            (fatherList[i].bedParam = body.bedParam),
+            (fatherList[i].bedType = body.bedType),
+            (fatherList[i].facilityCondition = body.facilityCondition);
+
+          break;
+        }
+        if (i == fatherList.length - 1 && fatherList[i].id !== body.id) {
+          fatherList.push(body);
+        }
+      }
+
+      return {
+        success: true,
+        data: {
+          list: fatherList,
+          total: fatherList.length, // 总条目数
+          pageSize: 10, // 每页显示条目个数
+          currentPage: 1 // 当前页数
+        }
+      };
+    }
+  },
+  // 删除父级应急床位管理
+  {
+    url: "/deleteFather",
+    method: "delete",
+    response: ({ body }) => {
+      fatherList = fatherList.filter(item => item.id !== body.id);
+
+      return {
+        success: true,
+        data: {
+          list: fatherList,
+          total: fatherList.length, // 总条目数
+          pageSize: 10, // 每页显示条目个数
+          currentPage: 1 // 当前页数
+        }
+      };
+    }
+  },
+  // 获取子级应急床位管理
+  {
+    url: "/sonList",
+    method: "post",
+    response: ({ body }) => {
+      let list;
+      for (let item in sonList) {
+        if (item === body.fatherId) {
+          list = sonList[item];
+        }
+      }
+      return {
+        success: true,
+        data: {
+          list,
+          total: sonList.length, // 总条目数
+          pageSize: 10, // 每页显示条目个数
+          currentPage: 1 // 当前页数
+        }
+      };
+    }
+  },
+  // 修改子级应急床位管理
+  {
+    url: "/updateSon",
+    method: "put",
+    response: ({ body }) => {
+      let list;
+      for (let item in sonList) {
+        if (item === body.fatherId) {
+          list = sonList[item];
+          break;
+        }
+      }
+
+      for (let i = 0; i < list.length; i++) {
+        if (list[i].id === body.id) {
+          (list[i].organizationName = body.organizationName),
+            (list[i].location = body.location),
+            (list[i].bedState = body.bedState),
+            (list[i].bedParam = body.bedParam),
+            (list[i].bedType = body.bedType),
+            (list[i].facilityCondition = body.facilityCondition);
+          break;
+        }
+        if (i == list.length - 1 && list[i].id !== body.id) {
+          list.push(body);
+          break;
+        }
+      }
+      sonList[body.fatherId] = list;
+
+      return {
+        success: true,
+        data: {
+          list: sonList[body.fatherId],
+          total: sonList[body.fatherId].length, // 总条目数
+          pageSize: 10, // 每页显示条目个数
+          currentPage: 1 // 当前页数
+        }
+      };
+    }
+  },
+  // 删除子级应急床位管理
+  {
+    url: "/deleteSon",
+    method: "delete",
+    response: ({ body }) => {
+      let list;
+      for (let item in sonList) {
+        if (item === body.fatherId) {
+          list = sonList[item];
+        }
+      }
+      list = list.filter(item => item.id !== body.id);
+      sonList[body.fatherId] = list;
+
+      return {
+        success: true,
+        data: {
+          list: sonList[body.fatherId],
+          total: sonList[body.fatherId].length, // 总条目数
           pageSize: 10, // 每页显示条目个数
           currentPage: 1 // 当前页数
         }

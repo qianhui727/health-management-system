@@ -2,7 +2,7 @@
 export default {
   path: "/humanResource",
   meta: {
-    icon: "ep:school",
+    icon: "ep:avatar",
     title: "应急人力资源管理"
   },
   children: [
@@ -12,6 +12,7 @@ export default {
       component: () =>
         import("@/views/humanResource/organizationManage/index.vue"),
       meta: {
+        icon: "ep:office-building",
         title: "应急机构管理"
       }
     },
@@ -20,6 +21,7 @@ export default {
       name: "humanResource_humanManage",
       component: () => import("@/views/humanResource/humanManage/index.vue"),
       meta: {
+        icon: "ri:user-star-line",
         title: "应急人员管理"
       }
     },
@@ -28,6 +30,7 @@ export default {
       name: "humanResource_groupManage",
       component: () => import("@/views/humanResource/groupManage/index.vue"),
       meta: {
+        icon: "ri:medicine-bottle-line",
         title: "应急队伍管理"
       }
     },
@@ -36,6 +39,7 @@ export default {
       name: "humanResource_expertManage",
       component: () => import("@/views/humanResource/expertManage/index.vue"),
       meta: {
+        icon: "ri:medal-2-line",
         title: "应急专家管理"
       }
     }

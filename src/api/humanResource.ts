@@ -78,6 +78,42 @@ export const updateExpertList = (data?: object) => {
 export const deleteExpertList = (data?: object) => {
   return http.request<ResultTable>("delete", "/deleteExpert", { data });
 };
+/** 获取应急药械管理列表 */
+export const getMedicalList = (data?: object) => {
+  return http.request<ResultTable>("post", "/medicalList", { data });
+};
+/** 修改应急药械管理列表 */
+export const updateMedicalList = (data?: object) => {
+  return http.request<ResultTable>("put", "/updateMedical", { data });
+};
+/** 删除应急药械管理列表 */
+export const deleteMedicalList = (data?: object) => {
+  return http.request<ResultTable>("delete", "/deleteMedical", { data });
+};
+/** 获取本级应急床位管理列表 */
+export const getFatherList = (data?: object) => {
+  return http.request<ResultTable>("post", "/fatherList", { data });
+};
+/** 修改本级应急床位管理列表 */
+export const updateFatherList = (data?: object) => {
+  return http.request<ResultTable>("put", "/updateFather", { data });
+};
+/** 删除本级应急床位管理列表 */
+export const deleteFatherList = (data?: object) => {
+  return http.request<ResultTable>("delete", "/deleteFather", { data });
+};
+/** 获取子级应急床位管理列表 */
+export const getSonList = (data?: object) => {
+  return http.request<ResultTable>("post", "/sonList", { data });
+};
+/** 修改子级应急床位管理列表 */
+export const updateSonList = (data?: object) => {
+  return http.request<ResultTable>("put", "/updateSon", { data });
+};
+/** 删除子级应急床位管理列表 */
+export const deleteSonList = (data?: object) => {
+  return http.request<ResultTable>("delete", "/deleteSon", { data });
+};
 
 /** 获取系统管理-用户管理列表 */
 export const getUserList = (data?: object) => {

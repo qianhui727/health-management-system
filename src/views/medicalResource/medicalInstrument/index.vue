@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { useOrganization } from "./utils/hook";
+import { useMedical } from "./utils/hook";
 import { ref, computed, nextTick, onMounted } from "vue";
-import { useRouter } from "vue-router";
 import { PureTableBar } from "@/components/RePureTableBar";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import {
@@ -10,11 +9,11 @@ import {
   deviceDetection,
   useResizeObserver
 } from "@pureadmin/utils";
+import { formatTime } from "@/utils/formatUtils";
 
 import Delete from "@iconify-icons/ep/delete";
 import EditPen from "@iconify-icons/ep/edit-pen";
 import Refresh from "@iconify-icons/ep/refresh";
-import View from "@iconify-icons/ep/view";
 import AddFill from "@iconify-icons/ri/add-circle-line";
 
 defineOptions({
@@ -38,7 +37,6 @@ const iconClass = computed(() => {
   ];
 });
 
-const router = useRouter();
 const treeRef = ref();
 const formRef = ref();
 const tableRef = ref();
@@ -60,7 +58,7 @@ const {
   handleSizeChange,
   handleCurrentChange,
   handleSelectionChange
-} = useOrganization(treeRef);
+} = useMedical(treeRef);
 
 onMounted(() => {
   useResizeObserver(contentRef, async () => {
@@ -72,10 +70,6 @@ onMounted(() => {
     });
   });
 });
-function handleRowClick(row) {
-  console.log(row);
-  router.push("/humanResource/groupManage");
-}
 </script>
 
 <template>
@@ -86,39 +80,65 @@ function handleRowClick(row) {
       :model="form"
       class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px] overflow-auto"
     >
-      <el-form-item label="机构名称：" prop="organizationName">
+      <el-form-item label="机构名称：" prop="medicalName">
         <el-input
-          v-model="form.organizationName"
+          v-model="form.medicalName"
           placeholder="请输入机构名称"
           clearable
           class="!w-[180px]"
         />
       </el-form-item>
-      <el-form-item label="机构类型：" prop="organizationType">
+      <el-form-item label="设备代号：" prop="equipmentCode">
+        <el-input
+          v-model="form.equipmentCode"
+          placeholder="请输入设备代号"
+          clearable
+          class="!w-[180px]"
+        />
+      </el-form-item>
+      <el-form-item label="设备名称：" prop="equipmentName">
+        <el-input
+          v-model="form.equipmentName"
+          placeholder="请输入设备名称"
+          clearable
+          class="!w-[180px]"
+        />
+      </el-form-item>
+
+      <el-form-item label="是否进口：" prop="entrance">
         <el-select
-          v-model="form.organizationType"
-          placeholder="请选择机构类型"
+          v-model="form.entrance"
+          placeholder="请选择是否进口"
           clearable
           class="!w-[180px]"
         >
-          <el-option label="疾控中心" value="疾控中心" />
-          <el-option label="卫生监督所" value="卫生监督所" />
-          <el-option label="医疗机构" value="医疗机构" />
-          <el-option label="社区卫生服务中心" value="社区卫生服务中心" />
-          <el-option label="中心血站" value="中心血站" />
-          <el-option label="急救医疗指挥中心" value="急救医疗指挥中心" />
+          <el-option label="是" value="是" />
+          <el-option label="否" value="否" />
         </el-select>
       </el-form-item>
-      <el-form-item label="状态：" prop="organizationState">
-        <el-select
-          v-model="form.organizationState"
-          placeholder="请选择状态"
+      <el-form-item label="生产厂家" prop="manufacturer">
+        <el-input
+          v-model="form.manufacturer"
+          placeholder="请输入生产厂家"
           clearable
           class="!w-[180px]"
-        >
-          <el-option label="运营中" value="运营中" />
-          <el-option label="暂停运营" value="暂停运营" />
-        </el-select>
+        />
+      </el-form-item>
+      <el-form-item label="设备型号：" prop="equipmentType">
+        <el-input
+          v-model="form.equipmentType"
+          placeholder="请输入设备型号"
+          clearable
+          class="!w-[180px]"
+        />
+      </el-form-item>
+      <el-form-item label="购买日期：" prop="purchaseTime">
+        <el-input
+          v-model="form.purchaseTime"
+          :placeholder="formatTime(new Date(), 'yyyy-MM-dd')"
+          clearable
+          class="!w-[180px]"
+        />
       </el-form-item>
       <el-form-item>
         <el-button
@@ -142,7 +162,7 @@ function handleRowClick(row) {
       <PureTableBar
         :class="[isShow && !deviceDetection() ? '!w-[60vw]' : 'w-full']"
         style="transition: width 220ms cubic-bezier(0.4, 0, 0.2, 1)"
-        title="应急机构管理"
+        title="应急药械管理"
         :columns="columns"
         @refresh="onSearch"
       >
@@ -177,18 +197,8 @@ function handleRowClick(row) {
             @selection-change="handleSelectionChange"
             @page-size-change="handleSizeChange"
             @page-current-change="handleCurrentChange"
-            @row-click="handleRowClick"
           >
             <template #operation="{ row }">
-              <el-button
-                class="reset-margin"
-                link
-                type="primary"
-                :size="size"
-                :icon="useRenderIcon(View)"
-              >
-                查看队伍
-              </el-button>
               <el-button
                 class="reset-margin"
                 link
@@ -200,7 +210,7 @@ function handleRowClick(row) {
                 修改
               </el-button>
               <el-popconfirm
-                :title="`是否确认删除机构名称为${row.organizationName}的这条数据`"
+                :title="`是否确认删除机构名称为${row.equipmentName}的这条数据`"
                 @confirm="handleDelete(row)"
               >
                 <template #reference>

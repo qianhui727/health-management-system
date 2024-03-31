@@ -5,18 +5,22 @@ import type { FormItemProps } from "../utils/types";
 import type { PaginationProps } from "@pureadmin/table";
 import { deviceDetection } from "@pureadmin/utils";
 import {
-  getOrganizationList,
-  updateOrganizationList,
-  deleteOrganizationList
+  getMedicalList,
+  updateMedicalList,
+  deleteMedicalList
 } from "@/api/humanResource";
 import { randomUUid, Timestamp, formatTime } from "@/utils/formatUtils";
 import { type Ref, reactive, ref, onMounted, h, toRaw, watch } from "vue";
 
-export function useOrganization(treeRef: Ref) {
+export function useMedical(treeRef: Ref) {
   const form = reactive({
-    organizationName: "",
-    organizationType: "",
-    organizationState: ""
+    medicalName: "",
+    equipmentCode: "",
+    equipmentName: "",
+    entrance: "",
+    manufacturer: "",
+    equipmentType: "",
+    purchaseTime: ""
   });
   const curRow = ref();
   const formRef = ref();
@@ -43,41 +47,80 @@ export function useOrganization(treeRef: Ref) {
   const columns: TableColumnList = [
     {
       label: "机构名称",
-      prop: "organizationName"
+      prop: "medicalName",
+      width: 150
     },
     {
-      label: "机构类型",
-      prop: "organizationType"
+      label: "设备代号",
+      prop: "equipmentCode",
+      width: 150
     },
     {
-      label: "机构地址",
-      prop: "organizationAddress"
+      label: "设备名称",
+      prop: "equipmentName",
+      width: 150
     },
     {
-      label: "联系电话",
-      prop: "organizationPhone"
+      label: "是否进口",
+      prop: "entrance",
+      width: 150
     },
     {
-      label: "负责人姓名",
-      prop: "organizationHuman"
+      label: "生产厂家",
+      prop: "manufacturer",
+      width: 150
     },
     {
-      label: "机构简介",
-      prop: "organizationInfo"
+      label: "设备型号",
+      prop: "equipmentType",
+      width: 150
     },
     {
-      label: "状态",
-      prop: "organizationState"
+      label: "购买日期",
+      prop: "purchaseTime",
+      minWidth: 160,
+      formatter: ({ purchaseTime }) => formatTime(purchaseTime, "yyyy-MM-dd")
     },
     {
-      label: "机构成立时间",
-      prop: "createTime",
-      formatter: ({ createTime }) => formatTime(createTime, "yyyy-MM-dd")
+      label: "是否为新设备",
+      prop: "newEquipment",
+      width: 150
+    },
+    {
+      label: "购买价格",
+      prop: "purchasePrice",
+      width: 150
+    },
+    {
+      label: "设计寿命",
+      prop: "designedLife",
+      width: 150
+    },
+    {
+      label: "检查/治疗/标本数",
+      prop: "sampleNum",
+      width: 150
+    },
+    {
+      label: "单位负责人",
+      prop: "principal",
+      width: 150
+    },
+    {
+      label: "填表人",
+      prop: "preparer",
+      width: 150
+    },
+    {
+      label: "报出日期",
+      prop: "submitTime",
+      minWidth: 160,
+      formatter: ({ submitTime }) => formatTime(submitTime, "yyyy-MM-dd")
     },
     {
       label: "操作",
       fixed: "right",
-      width: 250,
+      width: 210,
       slot: "operation"
     }
   ];
@@ -102,7 +145,7 @@ export function useOrganization(treeRef: Ref) {
 
   async function onSearch() {
     loading.value = true;
-    const { data } = await getOrganizationList(toRaw(form));
+    const { data } = await getMedicalList(toRaw(form));
     dataList.value = data.list;
     pagination.total = data.total;
     pagination.pageSize = data.pageSize;
@@ -114,7 +157,7 @@ export function useOrganization(treeRef: Ref) {
   }
   async function onUpdate(curData) {
     loading.value = true;
-    const { data } = await updateOrganizationList(toRaw(curData));
+    const { data } = await updateMedicalList(toRaw(curData));
     dataList.value = data.list;
     pagination.total = data.total;
     pagination.pageSize = data.pageSize;
@@ -126,7 +169,7 @@ export function useOrganization(treeRef: Ref) {
   }
   async function onDelete(row) {
     loading.value = true;
-    const { data } = await deleteOrganizationList(toRaw(row));
+    const { data } = await deleteMedicalList(toRaw(row));
     dataList.value = data.list;
     pagination.total = data.total;
     pagination.pageSize = data.pageSize;
@@ -144,18 +187,24 @@ export function useOrganization(treeRef: Ref) {
 
   function openDialog(title = "新增", row?: FormItemProps) {
     addDialog({
-      title: `${title}机构`,
+      title: `${title}药械`,
       props: {
         formInline: {
           id: row?.id ?? randomUUid(4),
-          organizationName: row?.organizationName ?? "",
-          organizationType: row?.organizationType ?? "",
-          organizationAddress: row?.organizationAddress ?? "",
-          organizationPhone: row?.organizationPhone ?? "",
-          organizationHuman: row?.organizationHuman ?? "",
-          organizationInfo: row?.organizationInfo ?? "",
-          organizationState: row?.organizationState ?? "",
-          createTime: Timestamp(row?.createTime) ?? ""
+          medicalName: row?.medicalName ?? "",
+          equipmentCode: row?.equipmentCode ?? "",
+          equipmentName: row?.equipmentName ?? "",
+          entrance: row?.entrance ?? "",
+          manufacturer: row?.manufacturer ?? "",
+          equipmentType: row?.equipmentType ?? "",
+          purchaseTime: row?.purchaseTime ?? "",
+          newEquipment: row?.newEquipment ?? "",
+          purchasePrice: row?.purchasePrice ?? "",
+          designedLife: row?.designedLife ?? "",
+          sampleNum: row?.sampleNum ?? "",
+          principal: row?.principal ?? "",
+          preparer: row?.preparer ?? "",
+          submitTime: row?.submitTime ?? ""
         }
       },
       width: "40%",
@@ -166,8 +215,11 @@ export function useOrganization(treeRef: Ref) {
       contentRenderer: () => h(editForm, { ref: formRef }),
       beforeSure: (done, { options }) => {
         const FormRef = formRef.value.getRef();
-        options.props.formInline.createTime = Timestamp(
-          options.props.formInline.createTime
+        options.props.formInline.purchaseTime = Timestamp(
+          options.props.formInline.purchaseTime
+        );
+        options.props.formInline.submitTime = Timestamp(
+          options.props.formInline.submitTime
         );
         const curData = options.props.formInline as FormItemProps;
         function chores() {
