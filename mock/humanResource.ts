@@ -322,6 +322,93 @@ let healthList: Recordable<any> = [
     healthPhone: "13000130010"
   }
 ];
+let medicalList: Recordable<any> = [
+  {
+    id: "m1",
+    medicalName: "北京协和医院",
+    equipmentCode: "EQ12345",
+    equipmentName: "CT扫描仪",
+    entrance: "否",
+    manufacturer: "西门子医疗",
+    equipmentType: "CT-1000",
+    purchaseTime: 1615766400000,
+    newEquipment: "是",
+    purchasePrice: "800000",
+    designedLife: "10年",
+    sampleNum: "5000",
+    principal: "张主任",
+    preparer: "李医生",
+    submitTime: 1681948800000
+  },
+  {
+    id: "m2",
+    medicalName: "上海瑞金医院",
+    equipmentCode: "EQ67890",
+    equipmentName: "MRI扫描仪",
+    entrance: "是",
+    manufacturer: "通用电气医疗",
+    equipmentType: "MRI-2000",
+    purchaseTime: 1640995200000,
+    newEquipment: "否",
+    purchasePrice: "1200000",
+    designedLife: "8年",
+    sampleNum: "4000",
+    principal: "王主任",
+    preparer: "赵医生",
+    submitTime: 1682035200000
+  },
+  {
+    id: "m3",
+    medicalName: "广州中山医院",
+    equipmentCode: "EQ55555",
+    equipmentName: "超声波仪器",
+    entrance: "否",
+    manufacturer: "飞利浦医疗",
+    equipmentType: "UltraSound-3000",
+    purchaseTime: 1603152000000,
+    newEquipment: "是",
+    purchasePrice: "600000",
+    designedLife: "12年",
+    sampleNum: "3500",
+    principal: "刘主任",
+    preparer: "陈医生",
+    submitTime: 1681862400000
+  },
+  {
+    id: "m4",
+    medicalName: "成都华西医院",
+    equipmentCode: "EQ99999",
+    equipmentName: "心电图机",
+    entrance: "是",
+    manufacturer: "日本光电",
+    equipmentType: "ECG-500",
+    purchaseTime: 1620604800000,
+    newEquipment: "是",
+    purchasePrice: "400000",
+    designedLife: "10年",
+    sampleNum: "2000",
+    principal: "黄主任",
+    preparer: "周医生",
+    submitTime: 1682121600000
+  },
+  {
+    id: "m5",
+    medicalName: "武汉同济医院",
+    equipmentCode: "EQ77777",
+    equipmentName: "全自动生化分析仪",
+    entrance: "否",
+    manufacturer: "贝克曼库尔特",
+    equipmentType: "AutoChem-800",
+    purchaseTime: 1655251200000,
+    newEquipment: "否",
+    purchasePrice: "1000000",
+    designedLife: "9年",
+    sampleNum: "6000",
+    principal: "徐主任",
+    preparer: "吴医生",
+    submitTime: 1682208000000
+  }
+];
 export default defineFakeRoute([
   // 获取应急机构管理
   {
@@ -721,6 +808,108 @@ export default defineFakeRoute([
         data: {
           list: expertList,
           total: expertList.length, // 总条目数
+          pageSize: 10, // 每页显示条目个数
+          currentPage: 1 // 当前页数
+        }
+      };
+    }
+  },
+  // 获取应急药械管理
+  {
+    url: "/medicalList",
+    method: "post",
+    response: ({ body }) => {
+      let list;
+      list = medicalList.filter(item =>
+        item.medicalName.includes(body?.medicalName)
+      );
+      if (body.equipmentCode)
+        list = medicalList.filter(item =>
+          item.equipmentCode.includes(body?.equipmentCode)
+        );
+
+      if (body.equipmentName)
+        list = medicalList.filter(item =>
+          item.equipmentName.includes(body?.equipmentName)
+        );
+      if (body.entrance)
+        list = medicalList.filter(item => item.entrance === body.entrance);
+
+      if (body.manufacturer)
+        list = medicalList.filter(item =>
+          item.manufacturer.includes(body?.manufacturer)
+        );
+      if (body.equipmentType)
+        list = medicalList.filter(item =>
+          item.equipmentType.includes(body?.equipmentType)
+        );
+
+      if (body.purchaseTime)
+        list = medicalList.filter(
+          item => item.purchaseTime === body.purchaseTime
+        );
+      return {
+        success: true,
+        data: {
+          list,
+          total: list.length, // 总条目数
+          pageSize: 10, // 每页显示条目个数
+          currentPage: 1 // 当前页数
+        }
+      };
+    }
+  },
+  // 修改应急药械管理
+  {
+    url: "/updateMedical",
+    method: "put",
+    response: ({ body }) => {
+      for (let i = 0; i < medicalList.length; i++) {
+        if (medicalList[i].id === body.id) {
+          (medicalList[i].medicalName = body.medicalName),
+            (medicalList[i].equipmentCode = body.equipmentCode),
+            (medicalList[i].equipmentName = body.equipmentName),
+            (medicalList[i].entrance = body.entrance),
+            (medicalList[i].manufacturer = body.manufacturer),
+            (medicalList[i].equipmentType = body.equipmentType),
+            (medicalList[i].purchaseTime = body.purchaseTime),
+            (medicalList[i].newEquipment = body.newEquipment),
+            (medicalList[i].purchasePrice = body.purchasePrice),
+            (medicalList[i].designedLife = body.designedLife),
+            (medicalList[i].sampleNum = body.sampleNum),
+            (medicalList[i].principal = body.principal),
+            (medicalList[i].preparer = body.preparer),
+            (medicalList[i].submitTime = body.submitTime);
+          break;
+        }
+        if (i == medicalList.length - 1 && medicalList[i].id !== body.id) {
+          medicalList.push(body);
+        }
+      }
+
+      return {
+        success: true,
+        data: {
+          list: medicalList,
+          total: medicalList.length, // 总条目数
+          pageSize: 10, // 每页显示条目个数
+          currentPage: 1 // 当前页数
+        }
+      };
+    }
+  },
+  // 删除应急药械管理
+  {
+    url: "/deleteMedical",
+    method: "delete",
+    response: ({ body }) => {
+      medicalList = medicalList.filter(item => item.id !== body.id);
+
+      return {
+        success: true,
+        data: {
+          list: medicalList,
+          total: medicalList.length, // 总条目数
           pageSize: 10, // 每页显示条目个数
           currentPage: 1 // 当前页数
         }
