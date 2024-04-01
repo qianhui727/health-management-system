@@ -409,6 +409,72 @@ let medicalList: Recordable<any> = [
     submitTime: 1682208000000
   }
 ];
+let fatherList: Recordable<any> = [
+  {
+    id: "f1",
+    organizationName: "北京协和医院",
+    location: "住院部5楼A区",
+    bedState: "空闲",
+    bedParam: "标准病床配置",
+    bedType: "普通病床",
+    facilityCondition: "设施齐全，环境良好"
+  },
+  {
+    id: "f2",
+    organizationName: "上海瑞金医院",
+    location: "ICU病房",
+    bedState: "占用",
+    bedParam: "高级监护设备",
+    bedType: "重症监护床",
+    facilityCondition: "设备先进，专业护理"
+  },
+  {
+    id: "f3",
+    organizationName: "广州中山医院",
+    location: "隔离病区",
+    bedState: "预定",
+    bedParam: "负压隔离系统",
+    bedType: "隔离床",
+    facilityCondition: "符合传染病防治标准"
+  },
+  {
+    id: "f4",
+    organizationName: "成都华西医院",
+    location: "急诊室",
+    bedState: "空闲",
+    bedParam: "急救设备齐全",
+    bedType: "急诊床",
+    facilityCondition: "急救设施完备，反应迅速"
+  },
+  {
+    id: "f5",
+    organizationName: "武汉同济医院",
+    location: "康复病房2楼",
+    bedState: "占用",
+    bedParam: "物理治疗设备",
+    bedType: "康复床",
+    facilityCondition: "康复设施完备，环境优美"
+  }
+];
+let sonList: Recordable<any> = {};
+fatherList.forEach(fatherItem => {
+  const { id, organizationName } = fatherItem;
+  sonList[id] = []; // 初始化每个父项的子列表
+
+  // 为每个父项随机生成1到3个子项
+  const numOfSons = Math.floor(Math.random() * 3) + 1;
+  for (let i = 0; i < numOfSons; i++) {
+    sonList[id].push({
+      id: `${id}-son-${i + 1}`, // 子项ID，基于父项ID生成
+      organizationName: `${organizationName}分院${i + 1}`, // 子项机构名称，基于父项名称生成
+      location: `${fatherItem.location}子区${i + 1}`, // 子项位置，基于父项位置生成
+      bedState: fatherItem.bedState === "空闲" ? "空闲" : "预定", // 子项床位状态，基于父项状态随机或根据逻辑生成
+      bedParam: `子项病床配置${i + 1}`, // 子项床位参数
+      bedType: fatherItem.bedType, // 子项床位类型，与父项相同
+      facilityCondition: `子项设施情况${i + 1}` // 子项基本设施情况
+    });
+  }
+});
 export default defineFakeRoute([
   // 获取应急机构管理
   {
@@ -749,9 +815,7 @@ export default defineFakeRoute([
         );
       }
       if (body.expertState)
-        list = organizationList.filter(
-          item => item.expertState === body.expertState
-        );
+        list = expertList.filter(item => item.expertState === body.expertState);
 
       return {
         success: true,
@@ -910,6 +974,170 @@ export default defineFakeRoute([
         data: {
           list: medicalList,
           total: medicalList.length, // 总条目数
+          pageSize: 10, // 每页显示条目个数
+          currentPage: 1 // 当前页数
+        }
+      };
+    }
+  },
+  // 获取父级应急床位管理
+  {
+    url: "/fatherList",
+    method: "post",
+    response: ({ body }) => {
+      let list;
+      list = fatherList.filter(item =>
+        item.organizationName.includes(body?.organizationName)
+      );
+      if (body.bedState) {
+        list = fatherList.filter(item => item.bedState === body.bedState);
+      }
+      if (body.bedType)
+        list = fatherList.filter(item => item.bedType === body.bedType);
+
+      return {
+        success: true,
+        data: {
+          list,
+          total: fatherList.length, // 总条目数
+          pageSize: 10, // 每页显示条目个数
+          currentPage: 1 // 当前页数
+        }
+      };
+    }
+  },
+  // 修改父级应急床位管理
+  {
+    url: "/updateFather",
+    method: "put",
+    response: ({ body }) => {
+      for (let i = 0; i < fatherList.length; i++) {
+        if (fatherList[i].id === body.id) {
+          (fatherList[i].organizationName = body.organizationName),
+            (fatherList[i].location = body.location),
+            (fatherList[i].bedState = body.bedState),
+            (fatherList[i].bedParam = body.bedParam),
+            (fatherList[i].bedType = body.bedType),
+            (fatherList[i].facilityCondition = body.facilityCondition);
+
+          break;
+        }
+        if (i == fatherList.length - 1 && fatherList[i].id !== body.id) {
+          fatherList.push(body);
+        }
+      }
+
+      return {
+        success: true,
+        data: {
+          list: fatherList,
+          total: fatherList.length, // 总条目数
+          pageSize: 10, // 每页显示条目个数
+          currentPage: 1 // 当前页数
+        }
+      };
+    }
+  },
+  // 删除父级应急床位管理
+  {
+    url: "/deleteFather",
+    method: "delete",
+    response: ({ body }) => {
+      fatherList = fatherList.filter(item => item.id !== body.id);
+
+      return {
+        success: true,
+        data: {
+          list: fatherList,
+          total: fatherList.length, // 总条目数
+          pageSize: 10, // 每页显示条目个数
+          currentPage: 1 // 当前页数
+        }
+      };
+    }
+  },
+  // 获取子级应急床位管理
+  {
+    url: "/sonList",
+    method: "post",
+    response: ({ body }) => {
+      let list;
+      for (let item in sonList) {
+        if (item === body.fatherId) {
+          list = sonList[item];
+        }
+      }
+      return {
+        success: true,
+        data: {
+          list,
+          total: sonList.length, // 总条目数
+          pageSize: 10, // 每页显示条目个数
+          currentPage: 1 // 当前页数
+        }
+      };
+    }
+  },
+  // 修改子级应急床位管理
+  {
+    url: "/updateSon",
+    method: "put",
+    response: ({ body }) => {
+      let list;
+      for (let item in sonList) {
+        if (item === body.fatherId) {
+          list = sonList[item];
+          break;
+        }
+      }
+
+      for (let i = 0; i < list.length; i++) {
+        if (list[i].id === body.id) {
+          (list[i].organizationName = body.organizationName),
+            (list[i].location = body.location),
+            (list[i].bedState = body.bedState),
+            (list[i].bedParam = body.bedParam),
+            (list[i].bedType = body.bedType),
+            (list[i].facilityCondition = body.facilityCondition);
+          break;
+        }
+        if (i == list.length - 1 && list[i].id !== body.id) {
+          list.push(body);
+          break;
+        }
+      }
+      sonList[body.fatherId] = list;
+
+      return {
+        success: true,
+        data: {
+          list: sonList[body.fatherId],
+          total: sonList[body.fatherId].length, // 总条目数
+          pageSize: 10, // 每页显示条目个数
+          currentPage: 1 // 当前页数
+        }
+      };
+    }
+  },
+  // 删除子级应急床位管理
+  {
+    url: "/deleteSon",
+    method: "delete",
+    response: ({ body }) => {
+      let list;
+      for (let item in sonList) {
+        if (item === body.fatherId) {
+          list = sonList[item];
+        }
+      }
+      list = list.filter(item => item.id !== body.id);
+      sonList[body.fatherId] = list;
+
+      return {
+        success: true,
+        data: {
+          list: sonList[body.fatherId],
+          total: sonList[body.fatherId].length, // 总条目数
           pageSize: 10, // 每页显示条目个数
           currentPage: 1 // 当前页数
         }

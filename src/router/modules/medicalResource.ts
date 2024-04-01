@@ -2,7 +2,7 @@
 export default {
   path: "/medicalResource",
   meta: {
-    icon: "ep:school",
+    icon: "ep:briefcase",
     title: "应急医疗资源管理"
   },
   children: [
@@ -12,6 +12,7 @@ export default {
       component: () =>
         import("@/views/medicalResource/medicalInstrument/index.vue"),
       meta: {
+        icon: "ep:box",
         title: "应急药械管理"
       }
     },
@@ -21,7 +22,17 @@ export default {
       component: () =>
         import("@/views/medicalResource/bloodResource/index.vue"),
       meta: {
+        icon: "ri:drop-line",
         title: "血液资源管理"
+      }
+    },
+    {
+      path: "/medicalResource/emergencyBed",
+      name: "medicalResource_emergencyBed",
+      component: () => import("@/views/medicalResource/emergencyBed/index.vue"),
+      meta: {
+        icon: "ri:hotel-bed-line",
+        title: "应急床位管理"
       }
     }
   ]

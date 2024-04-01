@@ -72,13 +72,12 @@ export function useOrganization(treeRef: Ref) {
     {
       label: "机构成立时间",
       prop: "createTime",
-      minWidth: 160,
       formatter: ({ createTime }) => formatTime(createTime, "yyyy-MM-dd")
     },
     {
       label: "操作",
       fixed: "right",
-      width: 210,
+      width: 250,
       slot: "operation"
     }
   ];

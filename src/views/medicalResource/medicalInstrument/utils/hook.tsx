@@ -187,7 +187,7 @@ export function useMedical(treeRef: Ref) {
 
   function openDialog(title = "新增", row?: FormItemProps) {
     addDialog({
-      title: `${title}机构`,
+      title: `${title}药械`,
       props: {
         formInline: {
           id: row?.id ?? randomUUid(4),

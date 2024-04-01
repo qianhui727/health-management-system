@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useOrganization } from "./utils/hook";
 import { ref, computed, nextTick, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import { PureTableBar } from "@/components/RePureTableBar";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import {
@@ -13,6 +14,7 @@ import {
 import Delete from "@iconify-icons/ep/delete";
 import EditPen from "@iconify-icons/ep/edit-pen";
 import Refresh from "@iconify-icons/ep/refresh";
+import View from "@iconify-icons/ep/view";
 import AddFill from "@iconify-icons/ri/add-circle-line";
 
 defineOptions({
@@ -36,6 +38,7 @@ const iconClass = computed(() => {
   ];
 });
 
+const router = useRouter();
 const treeRef = ref();
 const formRef = ref();
 const tableRef = ref();
@@ -69,6 +72,10 @@ onMounted(() => {
     });
   });
 });
+function handleRowClick(row) {
+  console.log(row);
+  router.push("/humanResource/groupManage");
+}
 </script>
 
 <template>
@@ -172,6 +179,16 @@ onMounted(() => {
             @page-current-change="handleCurrentChange"
           >
             <template #operation="{ row }">
+              <el-button
+                class="reset-margin"
+                link
+                type="primary"
+                :size="size"
+                :icon="useRenderIcon(View)"
+                @click="handleRowClick"
+              >
+                查看队伍
+              </el-button>
               <el-button
                 class="reset-margin"
                 link
