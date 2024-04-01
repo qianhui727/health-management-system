@@ -172,7 +172,7 @@ onMounted(() => {
             :icon="useRenderIcon(AddFill)"
             @click="openDialog()"
           >
-            新增机构
+            新增药械
           </el-button>
         </template>
         <template v-slot="{ size, dynamicColumns }">
@@ -210,7 +210,7 @@ onMounted(() => {
                 修改
               </el-button>
               <el-popconfirm
-                :title="`是否确认删除机构名称为${row.equipmentName}的这条数据`"
+                :title="`是否确认删除这条数据`"
                 @confirm="handleDelete(row)"
               >
                 <template #reference>

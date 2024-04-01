@@ -177,7 +177,6 @@ function handleRowClick(row) {
             @selection-change="handleSelectionChange"
             @page-size-change="handleSizeChange"
             @page-current-change="handleCurrentChange"
-            @row-click="handleRowClick"
           >
             <template #operation="{ row }">
               <el-button
@@ -186,6 +185,7 @@ function handleRowClick(row) {
                 type="primary"
                 :size="size"
                 :icon="useRenderIcon(View)"
+                @click="handleRowClick"
               >
                 查看队伍
               </el-button>
