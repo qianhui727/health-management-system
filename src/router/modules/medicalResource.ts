@@ -20,7 +20,7 @@ export default {
       path: "/medicalResource/bloodResource",
       name: "medicalResource_bloodResource",
       component: () =>
-        import("@/views/medicalResource/bloodResource/index.vue"),
+        import("@/views/medicalResource/bloodResources/index.vue"),
       meta: {
         icon: "ri:drop-line",
         title: "血液资源管理"

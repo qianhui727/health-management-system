@@ -18,7 +18,7 @@
       <el-table-column prop="data6" label="质量检测" width="150" />
       <el-table-column prop="data7" label="运输方式" width="150" />
       <el-table-column prop="number" label="编号" width="150" />
-      <el-table-column prop="status" label="订单操作" width="900">
+      <el-table-column prop="status" label="订单操作" width="600">
         <template #default="scope">
           <el-steps
             style="max-width: 600px"
@@ -35,22 +35,23 @@
           <el-button
             style="margin-top: 12px"
             @click="next(scope.row, scope.$index)"
-            >{{ buttonText[scope.$index] }}</el-button
+            type="primary"
+            ><el-icon><Promotion /></el-icon>
+            {{ buttonText[scope.$index] }}</el-button
           >
         </template>
       </el-table-column>
-      <el-table-column fixed="right" width="160">
+      <el-table-column fixed="right" width="140">
         <template #header>
           <el-input
             v-model="search"
-            size="small"
-            placeholder="请输入您要搜索的内容"
+            placeholder="搜索内容"
             @input="handleSearch"
           />
         </template>
         <template #default="scope"
-          ><el-button size="large" @click.prevent="editRow(scope.$index) "
-            >修改</el-button
+          ><el-button link type="primary" @click.prevent="editRow(scope.$index)"
+            ><el-icon><EditPen /></el-icon> 修改</el-button
           >
           <!-- <el-button
             type="danger"
@@ -530,6 +531,14 @@ const editRow = (index: number) => {
   editData.value =
     currentData.value[index + pageSize.value * (currentPage.value - 1)];
   dialogOverflowVisible.value = true;
+  // 将数据填充到修改表单中
+  form.data2 = editData.value.data2;
+  form.data3 = editData.value.data3;
+  form.data4 = editData.value.data4;
+  form.data5 = editData.value.data5;
+  form.data6 = editData.value.data6;
+  form.data7 = editData.value.data7;
+  form.number = editData.value.number;
 };
 // 提交修改表单后操作
 const submitFormed = () => {
@@ -902,5 +911,10 @@ total {
 }
 .demo-pagination-block .demonstration {
   margin-bottom: 16px;
+}
+:deep(.el-table__header th) {
+  font-weight: bold;
+  color: black;
+  background-color: #f5f7fa !important;
 }
 </style>

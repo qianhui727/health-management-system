@@ -1,7 +1,7 @@
 <template>
   <div class="total">
     <!-- 添加物资按钮 -->
-    <el-button plain @click="dialogFormVisible = true">
+    <el-button type="primary" @click="dialogFormVisible = true">
       添加物资信息
     </el-button>
     <!-- 表格 -->
@@ -12,21 +12,6 @@
       <el-table-column prop="data4" label="存储数量" width="150" />
       <el-table-column prop="data5" label="负责人" width="150" />
       <el-table-column prop="data6" label="质量检测记录" width="180" />
-      <el-table-column label="出入库情况" min-width="150">
-        <template #default="{ row }">
-          <el-tooltip :content="'物资状态: ' + row.status" placement="top">
-            <el-switch
-              v-model="row.status"
-              :active-value="'已出库'"
-              :inactive-value="'已入库'"
-              style="
-                --el-switch-on-color: #13ce66;
-                --el-switch-off-color: skyblue;
-              "
-            />
-          </el-tooltip>
-        </template>
-      </el-table-column>
       <el-table-column prop="data7" label="生产时间" width="150" />
       <el-table-column prop="data8" label="保质期或有效期" width="150" />
       <el-table-column prop="data9" label="价格" width="150" />
@@ -36,21 +21,20 @@
         <template #header>
           <el-input
             v-model="search"
-            size="small"
-            placeholder="请输入您要查找的信息"
+            placeholder="搜索内容"
             @input="handleSearch"
           />
         </template>
         <template #default="scope"
-          ><el-button size="small" @click.prevent="editRow(scope.$index)"
-            >修改</el-button
+          ><el-button link type="primary" @click.prevent="editRow(scope.$index)"
+            ><el-icon><EditPen /></el-icon> 修改</el-button
           >
           <el-button
-            type="danger"
-            size="small"
+            link
+            type="primary"
             @click.prevent="deleteRow(scope.$index)"
           >
-            删除
+            <el-icon><Delete /></el-icon> 删除
           </el-button>
         </template>
       </el-table-column>
@@ -97,9 +81,7 @@
         <el-form-item label="质量检测记录" :label-width="formLabelWidth">
           <el-input v-model="form.data6" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="(已出库/已入库)" :label-width="formLabelWidth">
-          <el-input v-model="form.status" autocomplete="off" />
-        </el-form-item>
+
         <el-form-item label="生产日期" :label-width="formLabelWidth">
           <el-input v-model="form.data7" autocomplete="off" />
         </el-form-item>
@@ -118,7 +100,7 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="dialogOverflowVisible = false">取消</el-button>
+          <el-button @click="cancel">取消</el-button>
           <el-button type="primary" @click="submitFormed"> 提交 </el-button>
         </div>
       </template>
@@ -149,9 +131,7 @@
         <el-form-item label="质量检测记录" :label-width="formLabelWidth">
           <el-input v-model="form.data6" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="(已出库/已入库)" :label-width="formLabelWidth">
-          <el-input v-model="form.status" autocomplete="off" />
-        </el-form-item>
+
         <el-form-item label="生产日期" :label-width="formLabelWidth">
           <el-input v-model="form.data7" autocomplete="off" />
         </el-form-item>
@@ -167,6 +147,7 @@
         <el-form-item label="物资编号" :label-width="formLabelWidth">
           <el-input v-model="form.number" autocomplete="off" />
         </el-form-item>
+        <div class="tip">数据为空将无法提交</div>
       </el-form>
       <!-- 表单底 -->
       <template #footer>
@@ -197,8 +178,7 @@ const form = reactive({
   data8: "",
   data9: "",
   number: "",
-  data10: "",
-  status: ""
+  data10: ""
 });
 //表格数据
 const tableData = ref([
@@ -213,8 +193,7 @@ const tableData = ref([
     data8: "2030年6月",
     data9: "10000元",
     data10: "6000元",
-    number: "987654321",
-    status: "已出库"
+    number: "987654321"
   },
   {
     data1: "笔记本电脑",
@@ -227,8 +206,7 @@ const tableData = ref([
     data8: "2030年7月",
     data9: "12000元",
     data10: "7000元",
-    number: "456789012",
-    status: "已出库"
+    number: "456789012"
   },
   {
     data1: "平板电脑",
@@ -241,8 +219,7 @@ const tableData = ref([
     data8: "2030年8月",
     data9: "15000元",
     data10: "8000元",
-    number: "234567890",
-    status: "已入库"
+    number: "234567890"
   },
   {
     data1: "智能音箱",
@@ -255,8 +232,7 @@ const tableData = ref([
     data8: "2030年9月",
     data9: "18000元",
     data10: "9000元",
-    number: "345678901",
-    status: "已出库"
+    number: "345678901"
   },
   {
     data1: "数码相机",
@@ -269,8 +245,7 @@ const tableData = ref([
     data8: "2030年10月",
     data9: "20000元",
     data10: "9500元",
-    number: "456789012",
-    status: "已入库"
+    number: "456789012"
   },
   {
     data1: "无线路由器",
@@ -283,8 +258,7 @@ const tableData = ref([
     data8: "2030年11月",
     data9: "22000元",
     data10: "9800元",
-    number: "567890123",
-    status: "已出库"
+    number: "567890123"
   },
   {
     data1: "平板电视",
@@ -297,8 +271,7 @@ const tableData = ref([
     data8: "2030年12月",
     data9: "24000元",
     data10: "9900元",
-    number: "678901234",
-    status: "已出库"
+    number: "678901234"
   },
   {
     data1: "空气净化器",
@@ -311,8 +284,7 @@ const tableData = ref([
     data8: "2031年1月",
     data9: "26000元",
     data10: "10000元",
-    number: "789012345",
-    status: "已出库"
+    number: "789012345"
   },
   {
     data1: "智能手表",
@@ -325,8 +297,7 @@ const tableData = ref([
     data8: "2031年2月",
     data9: "28000元",
     data10: "10500元",
-    number: "890123456",
-    status: "已入库"
+    number: "890123456"
   },
   {
     data1: "智能手环",
@@ -339,8 +310,7 @@ const tableData = ref([
     data8: "2031年3月",
     data9: "30000元",
     data10: "11000元",
-    number: "901234567",
-    status: "已出库"
+    number: "901234567"
   },
   {
     data1: "智能家居套装",
@@ -353,8 +323,7 @@ const tableData = ref([
     data8: "2031年4月",
     data9: "32000元",
     data10: "11500元",
-    number: "012345678",
-    status: "已出库"
+    number: "012345678"
   },
   {
     data1: "智能门锁",
@@ -367,8 +336,7 @@ const tableData = ref([
     data8: "2031年5月",
     data9: "34000元",
     data10: "12000元",
-    number: "123456789",
-    status: "已入库"
+    number: "123456789"
   },
   {
     data1: "智能摄像头",
@@ -381,8 +349,7 @@ const tableData = ref([
     data8: "2031年6月",
     data9: "36000元",
     data10: "12500元",
-    number: "234567890",
-    status: "已出库"
+    number: "234567890"
   },
   {
     data1: "VR眼镜",
@@ -395,8 +362,7 @@ const tableData = ref([
     data8: "2031年7月",
     data9: "38000元",
     data10: "13000元",
-    number: "345678901",
-    status: "已出库"
+    number: "345678901"
   },
   {
     data1: "智能手环",
@@ -409,8 +375,7 @@ const tableData = ref([
     data8: "2031年8月",
     data9: "40000元",
     data10: "13500元",
-    number: "456789012",
-    status: "已出库"
+    number: "456789012"
   },
   {
     data1: "智能音箱",
@@ -423,8 +388,7 @@ const tableData = ref([
     data8: "2031年9月",
     data9: "42000元",
     data10: "14000元",
-    number: "567890123",
-    status: "已出库"
+    number: "567890123"
   },
   {
     data1: "智能家居套装",
@@ -437,8 +401,7 @@ const tableData = ref([
     data8: "2031年10月",
     data9: "44000元",
     data10: "14500元",
-    number: "678901234",
-    status: "已出库"
+    number: "678901234"
   },
   {
     data1: "智能门锁",
@@ -451,8 +414,7 @@ const tableData = ref([
     data8: "2031年11月",
     data9: "46000元",
     data10: "15000元",
-    number: "789012345",
-    status: "已出库"
+    number: "789012345"
   },
   {
     data1: "智能门锁",
@@ -465,8 +427,7 @@ const tableData = ref([
     data8: "2031年12月",
     data9: "48000元",
     data10: "15500元",
-    number: "890123456",
-    status: "已入库"
+    number: "890123456"
   },
   {
     data1: "智能摄像头",
@@ -479,8 +440,7 @@ const tableData = ref([
     data8: "2032年1月",
     data9: "50000元",
     data10: "16000元",
-    number: "901234567",
-    status: "已出库"
+    number: "901234567"
   },
   {
     data1: "VR眼镜",
@@ -493,8 +453,7 @@ const tableData = ref([
     data8: "2032年2月",
     data9: "52000元",
     data10: "16500元",
-    number: "012345678",
-    status: "已出库"
+    number: "012345678"
   },
   {
     data1: "智能手表",
@@ -507,8 +466,7 @@ const tableData = ref([
     data8: "2032年3月",
     data9: "54000元",
     data10: "17000元",
-    number: "123456789",
-    status: "已入库"
+    number: "123456789"
   },
   {
     data1: "智能家居套装",
@@ -521,8 +479,7 @@ const tableData = ref([
     data8: "2032年4月",
     data9: "56000元",
     data10: "17500元",
-    number: "234567890",
-    status: "已出库"
+    number: "234567890"
   },
   {
     data1: "智能门锁",
@@ -535,8 +492,7 @@ const tableData = ref([
     data8: "2032年5月",
     data9: "58000元",
     data10: "18000元",
-    number: "345678901",
-    status: "已入库"
+    number: "345678901"
   },
   {
     data1: "智能门锁",
@@ -549,8 +505,7 @@ const tableData = ref([
     data8: "2032年6月",
     data9: "60000元",
     data10: "18500元",
-    number: "456789012",
-    status: "已出库"
+    number: "456789012"
   },
   {
     data1: "智能摄像头",
@@ -563,8 +518,7 @@ const tableData = ref([
     data8: "2032年7月",
     data9: "62000元",
     data10: "19000元",
-    number: "567890123",
-    status: "已出库"
+    number: "567890123"
   },
   {
     data1: "VR眼镜",
@@ -577,8 +531,7 @@ const tableData = ref([
     data8: "2032年8月",
     data9: "64000元",
     data10: "19500元",
-    number: "678901234",
-    status: "已入库"
+    number: "678901234"
   },
   {
     data1: "智能手表",
@@ -591,8 +544,7 @@ const tableData = ref([
     data8: "2032年9月",
     data9: "66000元",
     data10: "20000元",
-    number: "789012345",
-    status: "已出库"
+    number: "789012345"
   },
   {
     data1: "智能家居套装",
@@ -605,8 +557,7 @@ const tableData = ref([
     data8: "2032年10月",
     data9: "68000元",
     data10: "20500元",
-    number: "890123456",
-    status: "已出库"
+    number: "890123456"
   },
   {
     data1: "智能门锁",
@@ -619,8 +570,7 @@ const tableData = ref([
     data8: "2032年11月",
     data9: "70000元",
     data10: "21000元",
-    number: "901234567",
-    status: "已入库"
+    number: "901234567"
   },
   {
     data1: "智能门锁",
@@ -633,8 +583,7 @@ const tableData = ref([
     data8: "2033年12月",
     data9: "72000元",
     data10: "21500元",
-    number: "012345678",
-    status: "已入库"
+    number: "012345678"
   },
   {
     data1: "智能摄像头",
@@ -647,8 +596,7 @@ const tableData = ref([
     data8: "2033年1月",
     data9: "74000元",
     data10: "22000元",
-    number: "123456789",
-    status: "已出库"
+    number: "123456789"
   },
   {
     data1: "VR眼镜",
@@ -661,8 +609,7 @@ const tableData = ref([
     data8: "2033年2月",
     data9: "76000元",
     data10: "22500元",
-    number: "234567890",
-    status: "已入库"
+    number: "234567890"
   },
   {
     data1: "智能手表",
@@ -675,8 +622,7 @@ const tableData = ref([
     data8: "2033年3月",
     data9: "78000元",
     data10: "23000元",
-    number: "345678901",
-    status: "已出库"
+    number: "345678901"
   },
   {
     data1: "智能家居套装",
@@ -689,8 +635,7 @@ const tableData = ref([
     data8: "2033年4月",
     data9: "80000元",
     data10: "23500元",
-    number: "456789012",
-    status: "已入库"
+    number: "456789012"
   },
   {
     data1: "智能门锁",
@@ -703,8 +648,7 @@ const tableData = ref([
     data8: "2033年5月",
     data9: "82000元",
     data10: "24000元",
-    number: "567890123",
-    status: "已入库"
+    number: "567890123"
   },
   {
     data1: "智能门锁",
@@ -717,8 +661,7 @@ const tableData = ref([
     data8: "2033年6月",
     data9: "84000元",
     data10: "24500元",
-    number: "678901234",
-    status: "已出库"
+    number: "678901234"
   },
   {
     data1: "智能摄像头",
@@ -731,8 +674,7 @@ const tableData = ref([
     data8: "2033年7月",
     data9: "86000元",
     data10: "25000元",
-    number: "789012345",
-    status: "已出库"
+    number: "789012345"
   },
   {
     data1: "VR眼镜",
@@ -745,8 +687,7 @@ const tableData = ref([
     data8: "2033年8月",
     data9: "88000元",
     data10: "25500元",
-    number: "890123456",
-    status: "已入库"
+    number: "890123456"
   },
   {
     data1: "智能手表",
@@ -759,8 +700,7 @@ const tableData = ref([
     data8: "2033年9月",
     data9: "90000元",
     data10: "26000元",
-    number: "901234567",
-    status: "已出库"
+    number: "901234567"
   },
   {
     data1: "智能家居套装",
@@ -773,8 +713,7 @@ const tableData = ref([
     data8: "2033年10月",
     data9: "92000元",
     data10: "26500元",
-    number: "012345678",
-    status: "已入库"
+    number: "012345678"
   },
   {
     data1: "智能门锁",
@@ -787,8 +726,7 @@ const tableData = ref([
     data8: "2033年11月",
     data9: "94000元",
     data10: "27000元",
-    number: "123456789",
-    status: "已出库"
+    number: "123456789"
   }
 ]);
 const currentData = ref(tableData.value); //渲染时所操作数据
@@ -833,8 +771,26 @@ const editRow = (index: number) => {
   editData.value =
     currentData.value[index + pageSize.value * (currentPage.value - 1)];
   dialogOverflowVisible.value = true;
+  // 将数据填充到修改表单中
+  form.data1 = editData.value.data1;
+  form.data2 = editData.value.data2;
+  form.data3 = editData.value.data3;
+  form.data4 = editData.value.data4;
+  form.data5 = editData.value.data5;
+  form.data6 = editData.value.data6;
+  form.data7 = editData.value.data7;
+  form.data8 = editData.value.data8;
+  form.data9 = editData.value.data9;
+  form.number = editData.value.number;
+  form.data10 = editData.value.data10;
 };
 // 提交修改表单后操作
+const cancel = () => {
+  dialogOverflowVisible.value = false;
+  for (const key in form) {
+    form[key] = "";
+  }
+};
 const submitFormed = () => {
   dialogOverflowVisible.value = false;
   //找到需要修改数据的currentData索引
@@ -851,25 +807,37 @@ const submitFormed = () => {
   }
 };
 // 提交添加表单后操作
-const submitForm = () => {
-  // 将表单数据添加到表格数据中
-  currentData.value.push({ ...form });
-  // 更新currentData
-  // currentData.value = tableData.value;
-  console.log({ ...form });
-  if (currentData.value !== tableData.value) {
-    tableData.value.push({ ...form });
-  }
-  /////////////////////////////////////////////////////////
-  // 清空表单数据
+const isFormFilled = () => {
   for (const key in form) {
-    form[key] = "";
+    if (!form[key]) {
+      return false; // 如果任何一个属性的值为空，则返回 false
+    }
   }
-  dialogFormVisible.value = false;
-  totalItems.value = totalItems.value + 1;
-  // console.log(totalItems.value);
+  return true; // 如果所有属性的值都不为空，则返回 true
+};
+const submitForm = () => {
+  if (isFormFilled()) {
+    // 如果数据都不为空
+    // 将表单数据添加到表格数据中
+    currentData.value.push({ ...form });
+    // 更新currentData
+    // currentData.value = tableData.value;
+    console.log({ ...form });
+    if (currentData.value !== tableData.value) {
+      tableData.value.push({ ...form });
+    }
+    // 清空表单数据
+    for (const key in form) {
+      form[key] = "";
+    }
+    dialogFormVisible.value = false;
+    totalItems.value = totalItems.value + 1;
 
-  handleSizeChange(pageSize.value);
+    handleSizeChange(pageSize.value);
+    //  else {
+    //   dialogVisible.value = true;
+    // }
+  }
 };
 // 分页器
 const currentPage = ref<number>(1); //当前页数
@@ -940,7 +908,6 @@ const searchItems = () => {
         item.data9.toLowerCase().includes(keyword) ||
         item.data10.toLowerCase().includes(keyword) ||
         item.number.toLowerCase().includes(keyword) ||
-        item.status.toLowerCase().includes(keyword) ||
         regex.test(item.data1) // 使用正则表达式进行模糊匹配
       );
     });
@@ -978,5 +945,14 @@ total {
 }
 .demo-pagination-block .demonstration {
   margin-bottom: 16px;
+}
+.tip {
+  text-align: center;
+  color: red;
+}
+:deep(.el-table__header th) {
+  font-weight: bold;
+  color: black;
+  background-color: #f5f7fa !important;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="total">
     <!-- 添加物资按钮 -->
-    <el-button plain @click="dialogFormVisible = true">
+    <el-button type="primary" @click="dialogFormVisible = true">
       添加仓库信息
     </el-button>
     <!-- 表格 -->
@@ -21,21 +21,20 @@
         <template #header>
           <el-input
             v-model="search"
-            size="small"
-            placeholder="请输入您要搜索的内容"
+            placeholder="搜索内容"
             @input="handleSearch"
           />
         </template>
         <template #default="scope"
-          ><el-button size="small" @click.prevent="editRow(scope.$index)"
-            >修改</el-button
+          ><el-button link type="primary" @click.prevent="editRow(scope.$index)"
+            ><el-icon><EditPen /></el-icon> 修改</el-button
           >
           <el-button
-            type="danger"
-            size="small"
+            link
+            type="primary"
             @click.prevent="deleteRow(scope.$index)"
           >
-            删除
+             <el-icon><Delete /></el-icon> 删除
           </el-button>
         </template>
       </el-table-column>
@@ -100,7 +99,7 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="dialogOverflowVisible = false">取消</el-button>
+          <el-button @click="cancel">取消</el-button>
           <el-button type="primary" @click="submitFormed"> 提交 </el-button>
         </div>
       </template>
@@ -146,6 +145,7 @@
         <el-form-item label="备注" :label-width="formLabelWidth">
           <el-input v-model="form.data10" autocomplete="off" />
         </el-form-item>
+        <div class="tip">数据为空将无法提交</div>
       </el-form>
       <!-- 表单底 -->
       <template #footer>
@@ -847,8 +847,26 @@ const editRow = (index: number) => {
   editData.value =
     currentData.value[index + pageSize.value * (currentPage.value - 1)];
   dialogOverflowVisible.value = true;
+  // 将数据填充到修改表单中
+  form.data1 = editData.value.data1;
+  form.data2 = editData.value.data2;
+  form.data3 = editData.value.data3;
+  form.data4 = editData.value.data4;
+  form.data5 = editData.value.data5;
+  form.data6 = editData.value.data6;
+  form.data7 = editData.value.data7;
+  form.data8 = editData.value.data8;
+  form.data9 = editData.value.data9;
+  form.number = editData.value.number;
+  form.data10 = editData.value.data10;
 };
 // 提交修改表单后操作
+const cancel = () => {
+  dialogOverflowVisible.value = false;
+  for (const key in form) {
+    form[key] = "";
+  }
+};
 const submitFormed = () => {
   dialogOverflowVisible.value = false;
   //找到需要修改数据的currentData索引
@@ -865,25 +883,37 @@ const submitFormed = () => {
   }
 };
 // 提交添加表单后操作
-const submitForm = () => {
-  // 将表单数据添加到表格数据中
-  currentData.value.push({ ...form });
-  // 更新currentData
-  // currentData.value = tableData.value;
-  console.log({ ...form });
-  if (currentData.value !== tableData.value) {
-    tableData.value.push({ ...form });
-  }
-  /////////////////////////////////////////////////////////
-  // 清空表单数据
+const isFormFilled = () => {
   for (const key in form) {
-    form[key] = "";
+    if (!form[key]) {
+      return false; // 如果任何一个属性的值为空，则返回 false
+    }
   }
-  dialogFormVisible.value = false;
-  totalItems.value = totalItems.value + 1;
-  // console.log(totalItems.value);
+  return true; // 如果所有属性的值都不为空，则返回 true
+};
+const submitForm = () => {
+  if (isFormFilled()) {
+    // 如果数据都不为空
+    // 将表单数据添加到表格数据中
+    currentData.value.push({ ...form });
+    // 更新currentData
+    // currentData.value = tableData.value;
+    console.log({ ...form });
+    if (currentData.value !== tableData.value) {
+      tableData.value.push({ ...form });
+    }
+    // 清空表单数据
+    for (const key in form) {
+      form[key] = "";
+    }
+    dialogFormVisible.value = false;
+    totalItems.value = totalItems.value + 1;
 
-  handleSizeChange(pageSize.value);
+    handleSizeChange(pageSize.value);
+    //  else {
+    //   dialogVisible.value = true;
+    // }
+  }
 };
 // 分页器
 const currentPage = ref<number>(1); //当前页数
@@ -991,5 +1021,14 @@ total {
 }
 .demo-pagination-block .demonstration {
   margin-bottom: 16px;
+}
+.tip {
+  text-align: center;
+  color: red;
+}
+:deep(.el-table__header th) {
+  font-weight: bold;
+  color: black;
+  background-color: #f5f7fa !important;
 }
 </style>

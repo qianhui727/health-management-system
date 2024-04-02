@@ -2,7 +2,7 @@
 export default {
   path: "/emergencyResources",
   meta: {
-    icon:"ep:school",
+    icon:"lets-icons:3d-box-fill",
     title: "应急物资管理"
   },
   children: [
@@ -11,7 +11,7 @@ export default {
       name: "emergencyResources_materialCatalog",
       component: () => import("@/views/emergencyResources/materialCatalog/index.vue"),
       meta: {
-        icon:"cil:airplay",
+        icon:"pixelarticons:align-justify",
         title: "物资目录管理"
       }
     },
@@ -20,7 +20,7 @@ export default {
       name: "emergencyResources_storehouse",
       component: () => import("@/views/emergencyResources/storehouse/index.vue"),
       meta: {
-        icon:"cil:couch",
+        icon:"akar-icons:codepen-fill",
         title: "仓库管理"
       }
     },
@@ -29,7 +29,7 @@ export default {
       name: "emergencyResources_supplie",
       component: () => import("@/views/emergencyResources/supplies/index.vue"),
       meta: {
-        icon:"cil:badge",
+        icon:"akar-icons:dropbox-fill",
         title: "物资管理"
       }
     },
@@ -38,18 +38,10 @@ export default {
       name: "emergencyResources_centerSupplies",
       component: () => import("@/views/emergencyResources/centerSupplies/index.vue"),
       meta: {
-        icon: 'cil:burn',
+        icon: 'akar-icons:augmented-reality',
         title: "中心物资仓库"
       }
     },
-     {
-      path: "/emergencyResources/bloodResources",
-      name: "emergencyResources_bloodResources",
-      component: () => import("@/views/emergencyResources/bloodResources/index.vue"),
-      meta: {
-        icon: 'cil:burn',
-        title: "血液资源"
-      }
-    }
+     
   ]
 };
