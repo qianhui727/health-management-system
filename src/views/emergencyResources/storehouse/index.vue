@@ -1,59 +1,116 @@
 <template>
   <div class="total">
-    <!-- 添加物资按钮 -->
-    <el-button type="primary" @click="dialogFormVisible = true">
-      添加仓库信息
-    </el-button>
-    <!-- 表格 -->
-    <el-table :data="currentTableData" height="620" style="width: 100%">
-      <el-table-column fixed="left" prop="data1" label="仓库名称" width="150" />
-      <el-table-column prop="data2" label="所属企业" width="150" />
-      <el-table-column prop="data3" label="详细地址" width="160" />
-      <el-table-column prop="data4" label="仓库占地面积" width="150" />
-      <el-table-column prop="data5" label="物资类型" width="150" />
-      <el-table-column prop="data6" label="存储容量（体积）" width="150" />
-      <el-table-column prop="data7" label="运输设施" width="150" />
-      <el-table-column prop="data8" label="主要负责人" width="150" />
-      <el-table-column prop="data9" label="联系方式" width="150" />
-      <el-table-column prop="number" label="仓库编号" width="150" />
-      <el-table-column prop="data10" label="备注" width="150" />
-      <el-table-column fixed="right" min-width="150">
-        <template #header>
-          <el-input
-            v-model="search"
-            placeholder="搜索内容"
-            @input="handleSearch"
-          />
-        </template>
-        <template #default="scope"
-          ><el-button link type="primary" @click.prevent="editRow(scope.$index)"
-            ><el-icon><EditPen /></el-icon> 修改</el-button
-          >
-          <el-button
-            link
-            type="primary"
-            @click.prevent="deleteRow(scope.$index)"
-          >
-             <el-icon><Delete /></el-icon> 删除
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <!-- 分页器 -->
-    <div class="demo-pagination-block">
-      <el-pagination
-        v-model:current-page="currentPage"
-        v-model:page-size="pageSize"
-        :page-sizes="[15, 20, 30, 40]"
-        :small="small"
-        :disabled="disabled"
-        :background="background"
-        layout="sizes, prev, pager, next"
-        :total="totalItems"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
-    </div>
+    <el-card style="margin-bottom: 8px" shadow="hover">
+      <!-- 第一行 -->
+      <el-row :gutter="5" style="margin-top: 8px">
+        <el-col :span="8"
+          ><span>
+            仓库名称：
+            <el-input style="width: 240px" placeholder="请输入仓库名称" /></span
+        ></el-col>
+        <el-col :span="8"
+          ><span
+            >所属企业：
+            <el-input style="width: 240px" placeholder="请输入所属企业" /></span
+        ></el-col>
+        <el-col :span="8"
+          ><span
+            >物资类型：
+            <el-input style="width: 240px" placeholder="请输入物资类型" /></span
+        ></el-col>
+      </el-row>
+
+      <!-- 第二行 -->
+      <el-row :gutter="10" style="margin-top: 8px">
+       
+        <el-col :span="8"
+          ><span
+            >主要负责人：
+            <el-input
+              style="width: 240px"
+              placeholder="请输入主要负责热" /></span
+        ></el-col>
+        <el-col :span="8"
+          ><span
+            >物资编号：
+            <el-input style="width: 240px" placeholder="请输入物资编号" /></span
+        ></el-col>
+      </el-row>
+      <el-button type="primary" style="margin-right: 8px; margin-top: 8px">
+        <el-icon style="margin-right: 3px"><Search /></el-icon> 点击搜索
+      </el-button>
+      <el-button type="primary" style="margin-right: 8px; margin-top: 8px">
+        <el-icon style="margin-right: 3px"><Refresh /></el-icon> 重置
+      </el-button>
+    </el-card>
+    <el-card style="margin-bottom: 8px" shadow="hover">
+      <!-- 添加物资按钮 -->
+      <el-button
+        type="primary"
+        @click="dialogFormVisible = true"
+        style="margin-bottom: 8px"
+      >
+        <el-icon style="margin-right: 3px"><Plus /></el-icon> 添加物资
+      </el-button>
+      <!-- 表格 -->
+      <el-table :data="currentTableData" height="620" style="width: 100%">
+        <el-table-column
+          fixed="left"
+          prop="data1"
+          label="仓库名称"
+          width="150"
+        />
+        <el-table-column prop="data2" label="所属企业" width="150" />
+        <el-table-column prop="data3" label="详细地址" width="160" />
+        <el-table-column prop="data4" label="仓库占地面积" width="150" />
+        <el-table-column prop="data5" label="物资类型" width="150" />
+        <el-table-column prop="data6" label="存储容量（体积）" width="150" />
+        <el-table-column prop="data7" label="运输设施" width="150" />
+        <el-table-column prop="data8" label="主要负责人" width="150" />
+        <el-table-column prop="data9" label="联系方式" width="150" />
+        <el-table-column prop="number" label="仓库编号" width="150" />
+        <el-table-column prop="data10" label="备注" width="150" />
+        <el-table-column fixed="right" min-width="150">
+          <template #header>
+            <el-input
+              v-model="search"
+              placeholder="搜索内容"
+              @input="handleSearch"
+            />
+          </template>
+          <template #default="scope"
+            ><el-button
+              link
+              type="primary"
+              @click.prevent="editRow(scope.$index)"
+              ><el-icon><EditPen /></el-icon> 修改</el-button
+            >
+            <el-button
+              link
+              type="primary"
+              @click.prevent="deleteRow(scope.$index)"
+            >
+              <el-icon><Delete /></el-icon> 删除
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <!-- 分页器 -->
+      <div class="demo-pagination-block">
+        <el-pagination
+          v-model:current-page="currentPage"
+          v-model:page-size="pageSize"
+          :page-sizes="[15, 20, 30, 40]"
+          :small="small"
+          :disabled="disabled"
+          :background="background"
+          layout="sizes, prev, pager, next"
+          :total="totalItems"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        />
+      </div>
+    </el-card>
     <!-- 修改对话框 -->
     <el-dialog
       v-model="dialogOverflowVisible"

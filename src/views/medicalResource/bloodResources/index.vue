@@ -1,83 +1,121 @@
 <template>
   <div class="total">
-    <div id="main" style="width: 100%; height: 500px"></div>
-    <!-- 添加物资按钮 -->
-    <!-- <el-button plain @click="dialogFormVisible = true"> 添加信息 </el-button> -->
-    <!-- 表格 -->
-    <el-table
-      :data="currentTableData"
-      :span-method="objectSpanMethod"
-      border
-      style="width: 100%; margin-top: 20px"
-    >
-      <el-table-column fixed="left" prop="data1" label="医疗机构" width="180" />
-      <el-table-column prop="data2" label="血液类型" width="150" />
-      <el-table-column prop="data3" label="血液数量" width="150" />
-      <el-table-column prop="data4" label="储存条件" width="200" />
-      <el-table-column prop="data5" label="过期时间" width="150" />
-      <el-table-column prop="data6" label="质量检测" width="150" />
-      <el-table-column prop="data7" label="运输方式" width="150" />
-      <el-table-column prop="number" label="编号" width="150" />
-      <el-table-column prop="status" label="订单操作" width="600">
-        <template #default="scope">
-          <el-steps
-            style="max-width: 600px"
-            :active="scope.row.active"
-            finish-status="success"
-          >
-            <el-step title="申请出库" />
-            <el-step title="审批中" />
-            <el-step title="已出库" />
-            <el-step title="运输中" />
-            <el-step title="已到达血液中心" />
-          </el-steps>
+    <el-card style="margin-bottom: 8px" shadow="hover"
+      ><div id="main" style="width: 100%; height: 500px"></div>
+    </el-card>
 
-          <el-button
-            style="margin-top: 12px"
-            @click="next(scope.row, scope.$index)"
-            type="primary"
-            ><el-icon><Promotion /></el-icon>
-            {{ buttonText[scope.$index] }}</el-button
-          >
-        </template>
-      </el-table-column>
-      <el-table-column fixed="right" width="140">
-        <template #header>
-          <el-input
-            v-model="search"
-            placeholder="搜索内容"
-            @input="handleSearch"
-          />
-        </template>
-        <template #default="scope"
-          ><el-button link type="primary" @click.prevent="editRow(scope.$index)"
-            ><el-icon><EditPen /></el-icon> 修改</el-button
-          >
-          <!-- <el-button
+    <el-card style="margin-bottom: 8px" shadow="hover">
+      <!-- 第一行 -->
+      <el-row :gutter="0" style="margin-top: 8px">
+        <el-col :span="6"
+          ><span>
+            医疗机构：
+            <el-input style="width: 240px" placeholder="请输入医疗机构" /></span
+        ></el-col>
+        <el-col :span="6"
+          ><span
+            >血液类型：
+            <el-input style="width: 240px" placeholder="请输入血液类型" /></span
+        ></el-col>
+        <el-col :span="6"
+          ><span
+            >编号代码：
+            <el-input style="width: 240px" placeholder="请输入编号代码" /></span
+        ></el-col>
+        <el-col :span="6">
+          <el-button type="primary" style="margin-right: 8px; margin-top: 8px">
+            <el-icon style="margin-right: 3px"><Search /></el-icon> 点击搜索
+          </el-button>
+          <el-button type="primary" style="margin-right: 8px; margin-top: 8px">
+            <el-icon style="margin-right: 3px"><Refresh /></el-icon> 重置
+          </el-button>
+        </el-col>
+      </el-row>
+    </el-card>
+    <el-card style="margin-bottom: 8px" shadow="hover">
+      <el-table
+        :data="currentTableData"
+        :span-method="objectSpanMethod"
+        border
+        style="width: 100%; margin-top: 20px"
+      >
+        <el-table-column
+          fixed="left"
+          prop="data1"
+          label="医疗机构"
+          width="180"
+        />
+        <el-table-column prop="data2" label="血液类型" width="150" />
+        <el-table-column prop="data3" label="血液数量" width="150" />
+        <el-table-column prop="data4" label="储存条件" width="200" />
+        <el-table-column prop="data5" label="过期时间" width="150" />
+        <el-table-column prop="data6" label="质量检测" width="150" />
+        <el-table-column prop="data7" label="运输方式" width="150" />
+        <el-table-column prop="number" label="编号" width="150" />
+        <el-table-column prop="status" label="订单操作" width="600">
+          <template #default="scope">
+            <el-steps
+              style="max-width: 600px"
+              :active="scope.row.active"
+              finish-status="success"
+            >
+              <el-step title="申请出库" />
+              <el-step title="审批中" />
+              <el-step title="已出库" />
+              <el-step title="运输中" />
+              <el-step title="已到达血液中心" />
+            </el-steps>
+
+            <el-button
+              style="margin-top: 12px"
+              @click="next(scope.row, scope.$index)"
+              type="primary"
+              ><el-icon><Promotion /></el-icon>
+              {{ buttonText[scope.$index] }}</el-button
+            >
+          </template>
+        </el-table-column>
+        <el-table-column fixed="right" width="140">
+          <template #header>
+            <el-input
+              v-model="search"
+              placeholder="搜索内容"
+              @input="handleSearch"
+            />
+          </template>
+          <template #default="scope"
+            ><el-button
+              link
+              type="primary"
+              @click.prevent="editRow(scope.$index)"
+              ><el-icon><EditPen /></el-icon> 修改</el-button
+            >
+            <!-- <el-button
             type="danger"
             size="small"
             @click.prevent="deleteRow(scope.$index)"
           >
             删除
           </el-button> -->
-        </template>
-      </el-table-column>
-    </el-table>
-    <!-- 分页器 -->
-    <div class="demo-pagination-block">
-      <el-pagination
-        v-model:current-page="currentPage"
-        v-model:page-size="pageSize"
-        :page-sizes="[8, 20, 30, 40]"
-        :small="small"
-        :disabled="disabled"
-        :background="background"
-        layout="sizes, prev, pager, next"
-        :total="totalItems"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
-    </div>
+          </template>
+        </el-table-column>
+      </el-table>
+      <!-- 分页器 -->
+      <div class="demo-pagination-block">
+        <el-pagination
+          v-model:current-page="currentPage"
+          v-model:page-size="pageSize"
+          :page-sizes="[8, 20, 30, 40]"
+          :small="small"
+          :disabled="disabled"
+          :background="background"
+          layout="sizes, prev, pager, next"
+          :total="totalItems"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        />
+      </div>
+    </el-card>
     <!-- 修改对话框 -->
     <el-dialog
       v-model="dialogOverflowVisible"
